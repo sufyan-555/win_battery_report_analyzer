@@ -33,3 +33,4 @@ def remove_percent(df,col):
 
 def remove_mwh(df, col):
     df[col] = df[col].str.replace(',', '').str.replace(' mWh', '').astype(float)
+

@@ -1,0 +1,2 @@
+RECENT_USAGE_CAPTION="""This plot shows battery capacity remaining over time.
+The upward trend in the graph indicates that the battery is being charged while the downward trend indicates that the battery is being used, and the flat portions indicates that the battery is not being used or charged."""
