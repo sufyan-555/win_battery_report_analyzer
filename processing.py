@@ -59,4 +59,27 @@ def process_battery_table(df):
 
     return results, duration_plot, distribution_plot
 
+def process_capacity_table(df):
+    df['START DATE'] = df['PERIOD'].apply(get_start_date_form_range)
+    remove_mwh(df,'FULL CHARGE CAPACITY')
+    remove_mwh(df,'DESIGN CAPACITY')
+    df['CAPACITY'] = (df['FULL CHARGE CAPACITY'].astype(int)/df['DESIGN CAPACITY'].astype(int))*100
+    df['START DATE'] = pd.to_datetime(df['START DATE'], errors='coerce')
 
+    plot = get_battery_capacity_plot(df)
+
+    return plot
+
+def process_life_table(df):
+    df.columns = df.columns.droplevel(0)
+    df = df.drop(['CONNECTED STANDBY','Unnamed: 3_level_1','CONNECTED STANDBY'],axis=1)
+    df.columns = ['PERIOD','ACTIVE TRUE','ACTIVE DESIGN']
+    df['ACTIVE TRUE'] = pd.to_timedelta(df['ACTIVE TRUE'],errors='coerce')
+    df['ACTIVE DESIGN'] = pd.to_timedelta(df['ACTIVE DESIGN'],errors='coerce')
+    df['LOSS']  = df['ACTIVE DESIGN'] - df['ACTIVE TRUE']
+    df['START DATE'] = df['PERIOD'].apply(get_start_date_form_range)
+    df['START DATE'] = pd.to_datetime(df['START DATE'], errors='coerce')
+
+    plot = get_battery_backup_loss_plot(df)
+
+    return plot

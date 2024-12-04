@@ -18,13 +18,17 @@ if uploaded_file:
         battery_info = tables[1]
         recent = tables[2]
         battery = tables[3]
+        capacity = tables[5]
+        life = tables[6]
 
         ## Processing tables
-        results = process_tables(recent,battery)
+        results = process_tables(recent,battery,capacity,life)
         recent_plot = results['recent_plot']
         summary = results['summary']
         duration_plot = results['duration_plot']
         distribution_plot = results['distribution_plot']
+        capacity_plot = results['capacity_plot']
+        life_plot = results['life_plot']
 
 
 
@@ -52,15 +56,29 @@ if uploaded_file:
 
         with summary_section2:
             with st.expander("**Daily Energy Usage**",expanded=True):
-                print(summary["Daily Energy Usage (mWh)"])
                 write_key_value(summary["Daily Energy Usage (mWh)"])
             with st.expander("**Daily Active Time**",expanded=True):
                 write_key_value(summary["Daily Active Time (minutes)"])
 
+
         ## plots section
         st.subheader("Plots")
 
-    
+        ## battery capacity and loss plot
+        with st.expander(f"**Loss in Battery Capacity**",expanded=True):
+            capacity_info_section, capacity_plot_section = st.columns([2,3])
+            with capacity_info_section:
+                st.write(CAPACITY_LOSS_CAPTION)
+            with capacity_plot_section:
+                st.image(capacity_plot, use_container_width=True)
+
+        with st.expander(f"**Loss in Backup**",expanded=True):
+            life_plot_section, life_info_section = st.columns([3,2])
+            with life_plot_section:
+                st.image(life_plot,use_container_width=True)
+            with life_info_section:
+                st.write(LIFE_LOSS_CAPTION)
+
         ## recent plot
         if recent_plot is not None:
             with st.expander("**Recent Usage**",expanded=True):
@@ -80,6 +98,7 @@ if uploaded_file:
                 with st.expander("**Active Session Distribution**",expanded=True):
                     st.write(DISTRIBUTION_CAPTION)
                     st.image(distribution_plot,use_container_width=True)
+
 
 
 

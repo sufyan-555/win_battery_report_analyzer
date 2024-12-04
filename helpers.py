@@ -34,3 +34,5 @@ def remove_percent(df,col):
 def remove_mwh(df, col):
     df[col] = df[col].str.replace(',', '').str.replace(' mWh', '').astype(float)
 
+def get_start_date_form_range(date):
+    return date.split(' - ')[0]

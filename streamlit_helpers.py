@@ -18,7 +18,7 @@ def write_key_value(df,skip_keys=[]):
                 cols[1].write(value)
 
 
-def process_tables(recent, battery):
+def process_tables(recent, battery,capacity,life):
     results = {}
 
     # recent table
@@ -28,6 +28,7 @@ def process_tables(recent, battery):
         results['recent_plot'] = None
         st.error(f"Error while processing the Recent table: {e}")
 
+    # battery table
     try:
         summary, duration_plot, distribution_plot = process_battery_table(battery)
         results.update({
@@ -43,6 +44,22 @@ def process_tables(recent, battery):
         })
         st.error(f"Error while processing the Battery table: {e}")
 
+    # battery capacity table
+    try:
+        battery_capacity_plot = process_capacity_table(capacity)
+        results['capacity_plot'] = battery_capacity_plot
+    except Exception as e:
+        results['capacity_plot'] =None
+        st.error(f"Eror while processing Battery capacity plot: {e}")
+
+    # life table
+    try:
+        life_plot = process_life_table(life)
+        results['life_plot'] = life_plot
+    except Exception as e:
+        results['life_plot'] = None
+        st.error(f"Error while processing Battery life plot : {e}")
+        
     return results
 
 
