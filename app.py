@@ -14,6 +14,23 @@ st.title("Battery Report Analysis")
 with st.sidebar:
     uploaded_file = st.file_uploader("Upload your battery report HTML file", type=["html"])
 
+    # Instructions for the user
+    st.markdown(
+        """
+        ### How to Generate Your Battery Report
+        1. Open Command Prompt (Windows).
+        2. Type the following command and press Enter:
+           ```
+           powercfg/batteryreport output "C:\\battery-report.html"
+           ```
+        3. Locate the generated `battery-report.html` file in the specified directory.
+        4. Upload the file here to analyze your battery's performance.
+        
+        If still facing issues, you can [watch this video for step-by-step instructions](https://www.youtube.com/watch?v=zevIiiWBs1c) to generate your battery report.
+        
+        """
+    )
+
 if uploaded_file:
     ## get tables
     try:
@@ -42,13 +59,13 @@ if uploaded_file:
         ## Main Content
 
         ## Ai Summary
-        # try:
-        #     st.header("AI Summary")
-        #     with st.spinner("Generating AI Summary..."):
-        #         ai_summary = summarize_with_ai(summary,plots)
-        #         st.markdown(ai_summary)
-        # except Exception as e:
-        #     st.error(f"Sorry Could not generate AI Summary: {e}")
+        try:
+            st.header("AI Summary")
+            with st.spinner("Generating AI Summary..."):
+                ai_summary = summarize_with_ai(summary,plots)
+                st.markdown(ai_summary)
+        except Exception as e:
+            st.error(f"Sorry Could not generate AI Summary: {e}")
 
         ## General content
         st.header("Detailed Report")
