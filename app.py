@@ -21,7 +21,7 @@ with st.sidebar:
         1. Open Command Prompt (Windows).
         2. Type the following command and press Enter:
            ```
-           powercfg/batteryreport output "C:\\battery-report.html"
+           powercfg/batteryreport
            ```
         3. Locate the generated `battery-report.html` file in the specified directory.
         4. Upload the file here to analyze your battery's performance.
@@ -133,7 +133,15 @@ if uploaded_file:
                     st.image(distribution_plot,use_container_width=True)
 
 
-
+        st.markdown("---")
+        st.subheader("⭐ Found This Useful?")
+        st.markdown(
+            """
+            If you found this tool helpful, consider giving it a ⭐ on the [GitHub repository](https://github.com/sufyan-555/win_battery_report_analyzer) to show your support!
+            
+            Your feedback helps us improve and create more useful tools. Thank you for using the Battery Report Analysis app! 😊
+            """
+        )
 
     except Exception as e:
         st.error(f"Error while processing the HTML file: {e}")
