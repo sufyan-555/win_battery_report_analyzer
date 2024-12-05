@@ -18,7 +18,7 @@ def get_minutes(x):
     return int(pd.Timedelta(x).total_seconds()/60)
 
 def handle_time(df,col,drop=True):
-    df['Date'] = df[col].apply(get_date)
+    df.loc[:, 'Date'] = df[col].apply(get_date)
     df['Date'] = df['Date'].ffill()
     df['Time'] = df[col].apply(get_time)
     df[col] = pd.to_datetime(df['Date']+' '+df['Time'], format='%Y-%m-%d %H:%M:%S')
@@ -29,7 +29,7 @@ def handle_duration(df,col):
     df[col] = df[col].apply(get_minutes)
 
 def remove_percent(df,col):
-    df[col] = df[col].str.replace(' %','').astype(float)
+    df[col] = df[col].str.replace(' %', '', regex=True).astype(float)
 
 def remove_mwh(df, col):
     df[col] = df[col].str.replace(',', '').str.replace(' mWh', '').astype(float)

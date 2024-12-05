@@ -1,7 +1,11 @@
 import streamlit as st
 from captions import *
 from streamlit_helpers import *
+from model import *
 from helpers import get_tables
+import warnings
+
+warnings.filterwarnings("ignore")
 
 st.set_page_config(layout="wide")
 st.title("Battery Report Analysis")
@@ -20,9 +24,10 @@ if uploaded_file:
         battery = tables[3]
         capacity = tables[5]
         life = tables[6]
+        battery_backup = tables[7]
 
         ## Processing tables
-        results = process_tables(recent,battery,capacity,life)
+        results = process_tables(recent,battery,capacity,life,battery_backup)
         recent_plot = results['recent_plot']
         summary = results['summary']
         duration_plot = results['duration_plot']
@@ -31,8 +36,23 @@ if uploaded_file:
         life_plot = results['life_plot']
 
 
+        ## Processing Data for AI Summary
+        data = str(basic_info)+ str(battery_info) + str(summary)
+        plots = [recent_plot, duration_plot, distribution_plot, capacity_plot, life_plot] 
 
         ## Main Content
+
+        ## Ai Summary
+        try:
+            st.header("AI Summary")
+            with st.spinner("Generating AI Summary..."):
+                ai_summary = summarize_with_ai(summary,plots)
+                st.markdown(ai_summary)
+        except Exception as e:
+            st.error(f"Sorry Could not generate AI Summary: {e}")
+
+        ## General content
+        st.header("Detailed Report")
         basic_info_section, battery_info_section = st.columns(2) 
         
         ## baisc info Section

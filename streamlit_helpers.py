@@ -7,8 +7,8 @@ def write_key_value(df,skip_keys=[]):
 
     if isinstance(df,pd.DataFrame):
         for index, row in df.dropna().iterrows():
-            key = row[0]
-            value = row[1]
+            key = row.iloc[0]
+            value = row.iloc[1]
             cols[0].write(key)
             cols[1].write(value)
     else:
@@ -18,7 +18,7 @@ def write_key_value(df,skip_keys=[]):
                 cols[1].write(value)
 
 
-def process_tables(recent, battery,capacity,life):
+def process_tables(recent, battery,capacity,life,battery_backup):
     results = {}
 
     # recent table
@@ -31,6 +31,9 @@ def process_tables(recent, battery,capacity,life):
     # battery table
     try:
         summary, duration_plot, distribution_plot = process_battery_table(battery)
+        ## adding to the battery backup section here
+        summary['Expected Battery Backup Now'] = battery_backup.values[0][1]
+        summary['Expected Battery Backup when new'] = battery_backup.values[0][4]
         results.update({
             'summary': summary,
             'duration_plot': duration_plot,
