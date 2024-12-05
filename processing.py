@@ -35,8 +35,8 @@ def process_battery_table(df):
 
     # Daily usage patterns
     df['Date'] = df['START TIME'].dt.date  # Extract the date
-    daily_energy_usage = df.groupby('Date')['ENERGY DRAINED.1'].sum()  # Total energy per day
-    daily_active_time = df[df['STATE'] == 'Active'].groupby('Date')['DURATION'].sum()  # Active time per day
+    daily_energy_usage = df.groupby('Date')['ENERGY DRAINED.1'].sum().reset_index()  # Total energy per day
+    daily_active_time = df[df['STATE'] == 'Active'].groupby('Date')['DURATION'].sum().reset_index()  # Active time per day
 
     # Results summary
     results = {
@@ -46,18 +46,14 @@ def process_battery_table(df):
         "Average Energy Drained in Active State (mWh)": str(avg_energy_drained_active.round(2)),
         "Average Energy Drained in Standby (mWh)": str(avg_energy_drained_standby.round(2)),
         "Longest Active Period (minutes)": str(longest_active_period.round(2)),
-        "Shortest Active Period (minutes)": str(shortest_active_period.round(2)),
-        "Daily Energy Usage (mWh)": daily_energy_usage,
-        "Daily Active Time (minutes)": daily_active_time
+        "Shortest Active Period (minutes)": str(shortest_active_period.round(2))
     }
 
-
     ## Generating the plots
-
     duration_plot = get_active_duration_plot(df)
     distribution_plot = get_active_distribution_plot(df)
 
-    return results, duration_plot, distribution_plot
+    return [results,daily_energy_usage,daily_active_time], duration_plot, distribution_plot
 
 def process_capacity_table(df):
     df['START DATE'] = df['PERIOD'].apply(get_start_date_form_range)

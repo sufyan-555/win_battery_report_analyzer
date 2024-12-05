@@ -29,7 +29,6 @@ if uploaded_file:
         ## Processing tables
         results = process_tables(recent,battery,capacity,life,battery_backup)
         recent_plot = results['recent_plot']
-        summary = results['summary']
         duration_plot = results['duration_plot']
         distribution_plot = results['distribution_plot']
         capacity_plot = results['capacity_plot']
@@ -37,19 +36,19 @@ if uploaded_file:
 
 
         ## Processing Data for AI Summary
-        data = str(basic_info)+ str(battery_info) + str(summary)
+        data = str(basic_info)+ str(battery_info) + str(results['summary'])
         plots = [recent_plot, duration_plot, distribution_plot, capacity_plot, life_plot] 
 
         ## Main Content
 
         ## Ai Summary
-        try:
-            st.header("AI Summary")
-            with st.spinner("Generating AI Summary..."):
-                ai_summary = summarize_with_ai(summary,plots)
-                st.markdown(ai_summary)
-        except Exception as e:
-            st.error(f"Sorry Could not generate AI Summary: {e}")
+        # try:
+        #     st.header("AI Summary")
+        #     with st.spinner("Generating AI Summary..."):
+        #         ai_summary = summarize_with_ai(summary,plots)
+        #         st.markdown(ai_summary)
+        # except Exception as e:
+        #     st.error(f"Sorry Could not generate AI Summary: {e}")
 
         ## General content
         st.header("Detailed Report")
@@ -69,16 +68,13 @@ if uploaded_file:
         summary_section1, summary_section2 = st.columns(2)
         with summary_section1:
             with st.expander("**Summary of Last 36 hours**",expanded=True):
-                write_key_value(summary,skip_keys=[
-                    "Daily Energy Usage (mWh)",
-                    "Daily Active Time (minutes)"
-                ])
+                write_key_value(results['summary'])
 
         with summary_section2:
             with st.expander("**Daily Energy Usage**",expanded=True):
-                write_key_value(summary["Daily Energy Usage (mWh)"])
+                write_key_value(results["daily_energy_usage"])
             with st.expander("**Daily Active Time**",expanded=True):
-                write_key_value(summary["Daily Active Time (minutes)"])
+                write_key_value(results["daily_active_time"])
 
 
         ## plots section

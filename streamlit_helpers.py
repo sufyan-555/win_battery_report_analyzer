@@ -2,20 +2,13 @@ import streamlit as st
 import pandas as pd
 from processing import *
 
-def write_key_value(df,skip_keys=[]):
-    cols = st.columns(2)
+def write_key_value(df):
+    if isinstance(df,dict):
+        df = pd.DataFrame(list(df.items()), columns=["Key", "Value"])
 
-    if isinstance(df,pd.DataFrame):
-        for index, row in df.dropna().iterrows():
-            key = row.iloc[0]
-            value = row.iloc[1]
-            cols[0].write(key)
-            cols[1].write(value)
-    else:
-        for key, value in df.items():
-            if key not in skip_keys:
-                cols[0].write(str(key))
-                cols[1].write(value)
+    df = df.dropna()
+    df.columns = ["Key", "Value"]
+    st.dataframe(df,use_container_width=True,hide_index=True)
 
 
 def process_tables(recent, battery,capacity,life,battery_backup):
@@ -30,14 +23,20 @@ def process_tables(recent, battery,capacity,life,battery_backup):
 
     # battery table
     try:
-        summary, duration_plot, distribution_plot = process_battery_table(battery)
+        
+        textual_summary, duration_plot, distribution_plot = process_battery_table(battery)
+        summary = textual_summary[0]
+        daily_energy_usage = textual_summary[1]
+        daily_active_time = textual_summary[2]
         ## adding to the battery backup section here
         summary['Expected Battery Backup Now'] = battery_backup.values[0][1]
         summary['Expected Battery Backup when new'] = battery_backup.values[0][4]
         results.update({
             'summary': summary,
             'duration_plot': duration_plot,
-            'distribution_plot': distribution_plot
+            'distribution_plot': distribution_plot,
+            'daily_energy_usage': daily_energy_usage,
+            'daily_active_time': daily_active_time
         })
     except Exception as e:
         results.update({
