@@ -62,7 +62,7 @@ if uploaded_file:
         try:
             st.header("AI Summary")
             with st.spinner("Generating AI Summary..."):
-                ai_summary = summarize_with_ai(summary,plots)
+                ai_summary = summarize_with_ai(results['summary'],plots)
                 st.markdown(ai_summary)
         except Exception as e:
             st.error(f"Sorry Could not generate AI Summary: {e}")
