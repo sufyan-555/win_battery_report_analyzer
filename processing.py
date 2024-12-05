@@ -40,13 +40,13 @@ def process_battery_table(df):
 
     # Results summary
     results = {
-        "Total Energy Drained (mWh)": str(total_energy_drained.round(2)),
-        "Total Active Time (minutes)": str(total_active_time.round(2)),
-        "Total Standby Time (minutes)": str(total_standby_time.round(2)),
-        "Average Energy Drained in Active State (mWh)": str(avg_energy_drained_active.round(2)),
-        "Average Energy Drained in Standby (mWh)": str(avg_energy_drained_standby.round(2)),
-        "Longest Active Period (minutes)": str(longest_active_period.round(2)),
-        "Shortest Active Period (minutes)": str(shortest_active_period.round(2))
+        "Total Energy Drained (mWh)": str(round(total_energy_drained,2)),
+        "Total Active Time (minutes)": str(round(total_active_time,2)),
+        "Total Standby Time (minutes)": str(round(total_standby_time,2)),
+        "Average Energy Drained in Active State (mWh)": str(round(avg_energy_drained_active,2)),
+        "Average Energy Drained in Standby (mWh)": str(round(avg_energy_drained_standby,2)),
+        "Longest Active Period (minutes)": str(round(longest_active_period,2)),
+        "Shortest Active Period (minutes)": str(round(shortest_active_period,2))
     }
 
     ## Generating the plots
